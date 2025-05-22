@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pas_25_33"
-    compileSdk = 34
+    namespace = "com.example.tryoutpas_25_33"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.pas_25_33"
+        applicationId = "com.example.tryoutpas_25_33"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -32,7 +32,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -40,4 +39,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.glide)
 }
