@@ -27,9 +27,17 @@ public class PlayerFragment extends Fragment {
     private List<ModelPlayer> playerList = new ArrayList<>();
     private PlayerAdapter adapter;
     private RecyclerView recyclerView;
-    private String playerName;
+    private String teamName;
     private ProgressBar pbLoading;
 
+    // Constructor untuk menerima team name
+    public static PlayerFragment newInstance(String teamName) {
+        PlayerFragment fragment = new PlayerFragment();
+        Bundle args = new Bundle();
+        args.putString("team_name", teamName);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -41,16 +49,30 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         recyclerView = view.findViewById(R.id.rvpemain);
         pbLoading = view.findViewById(R.id.pbLoading);
+
+
         adapter = new PlayerAdapter(playerList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        loadTeams();
+
+        if (getArguments() != null) {
+            teamName = getArguments().getString("team_name");
+        }
+
+        if (teamName != null && !teamName.isEmpty()) {
+            loadPlayers();
+        } else {
+            pbLoading.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void loadTeams() {
+    private void loadPlayers() {
         pbLoading.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
@@ -60,26 +82,36 @@ public class PlayerFragment extends Fragment {
                 .build();
 
         ApiService api = retrofit.create(ApiService.class);
-        Call<PlayerResponse> call = api.getPlayerByTeam(playerName);
-
+        Call<PlayerResponse> call = api.getPlayerByTeam(teamName);
 
         call.enqueue(new Callback<PlayerResponse>() {
             @Override
             public void onResponse(Call<PlayerResponse> call, Response<PlayerResponse> response) {
+                pbLoading.setVisibility(View.GONE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     recyclerView.setVisibility(View.VISIBLE);
-
                     playerList.clear();
                     playerList.addAll(response.body().getPlayers());
                     adapter.notifyDataSetChanged();
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
-                pbLoading.setVisibility(View.GONE);
             }
 
+            @Override
             public void onFailure(Call<PlayerResponse> call, Throwable t) {
+                pbLoading.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
             }
         });
     }
 
+    public void updateTeamName(String newTeamName) {
+        this.teamName = newTeamName;
+        if (isAdded() && getView() != null) {
+            loadPlayers();
+        }
+    }
 }

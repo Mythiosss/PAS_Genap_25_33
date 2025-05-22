@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,18 +30,33 @@ public class LaLigaFragment extends Fragment {
     private ProgressBar pbLoading;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        pbLoading = findViewById(R.id.pbLoading);
-        recyclerView = findViewById(R.id.rvliga);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        // Inflate layout untuk fragment
+        View view = inflater.inflate(R.layout.laliga_fragment, container, false);
+
+        // Initialize views
+        pbLoading = view.findViewById(R.id.pbLoading);
+        recyclerView = view.findViewById(R.id.rvliga);
+
+        // Setup RecyclerView
         adapter = new TeamAdapter(teamList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        loadTeamData();
+    }
+
+    private void loadTeamData() {
+        pbLoading.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.thesportsdb.com/")
@@ -48,25 +64,31 @@ public class LaLigaFragment extends Fragment {
                 .build();
 
         ApiService api = retrofit.create(ApiService.class);
-        String leagueName = getIntent().getStringExtra("La Liga");
-        Call<TeamResponse> call = api.getTeamsByLeague(leagueName);
 
+        String leagueName = "Spanish La Liga";
+        Call<TeamResponse> call = api.getTeamsByLeague(leagueName);
 
         call.enqueue(new Callback<TeamResponse>() {
             @Override
             public void onResponse(Call<TeamResponse> call, Response<TeamResponse> response) {
+                pbLoading.setVisibility(View.GONE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     recyclerView.setVisibility(View.VISIBLE);
-
                     teamList.clear();
                     teamList.addAll(response.body().getTeams());
                     adapter.notifyDataSetChanged();
+                } else {
+
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
-                pbLoading.setVisibility(View.GONE);
             }
 
+            @Override
             public void onFailure(Call<TeamResponse> call, Throwable t) {
-
+                pbLoading.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
         });
+    }
 }
