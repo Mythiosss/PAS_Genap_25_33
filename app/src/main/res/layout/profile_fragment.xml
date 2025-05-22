@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     card_view:cardCornerRadius="16dp"
-    card_view:cardElevation="8dp"
+    card_view:cardElevation="80dp"
     android:background="@android:color/white">
 
     <LinearLayout
@@ -153,6 +153,33 @@
             android:text="No Absen"
             android:textColor="@color/black"/>
 
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="151dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="10dp"
+            android:text="25"
+            android:textColor="#444444"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="151dp"
+            android:layout_height="wrap_content"
+            android:text="33"
+            android:textColor="#444444"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
     </LinearLayout>
 
 
