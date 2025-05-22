@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+        android:id="@+id/nav_laliga"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Laliga" />
+    <item
+        android:id="@+id/nav_pemain"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Pemain" />
+    <item
+        android:id="@+id/nav_profil"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Profil" />
 </menu>
