@@ -35,6 +35,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         ModelPlayer team = playerList.get(position);
         holder.textViewName.setText(team.getStrPlayer());
         holder.tvNationality.setText(team.getStrNationality());
+        holder.tvLahir.setText(team.getDateBorn());
         Glide.with(holder.itemView.getContext())
                 .load(team.getStrThumb())
                 .into(holder.imageBadge);
@@ -49,18 +50,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         TextView textViewName, textViewStadium;
         ImageView imageBadge;
         TextView tvNationality;
-        TextView tvLahir
+        TextView tvLahir;
 
-        public TeamViewHolder(View itemView) {
+        public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewTeamName);
             tvNationality = itemView.findViewById(R.id.textViewStadium);
             imageBadge = itemView.findViewById(R.id.ivPlayerPicture);
             tvLahir = itemView.findViewById(R.id.textViewDateBorn);
-        }
-
-        public PlayerViewHolder(@NonNull View itemView) {
-            super(itemView);
         }
     }
 }

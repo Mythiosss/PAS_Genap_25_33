@@ -4,9 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.tryoutpas_25_33.R;
 
 import java.util.List;
 
@@ -21,17 +26,33 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
     @Override
     public TeamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.itemliga, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.itemlaliga, parent, false);
         return new TeamViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TeamAdapter.TeamViewHolder holder, int position) {
-
+    public void onBindViewHolder(TeamViewHolder holder, int position) {
+        ModelTeam team = teamList.get(position);
+        holder.textViewTeamName.setText(team.getStrTeam());
+        holder.textViewStadium.setText(team.getStrStadium());
+        Glide.with(holder.itemView.getContext())
+                .load(team.getStrBadge())
+                .into(holder.imageBadge);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return teamList.size();
+    }
+
+    public static class TeamViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewTeamName, textViewStadium;
+        ImageView imageBadge;
+        public TeamViewHolder(View itemView) {
+            super(itemView);
+            textViewTeamName = itemView.findViewById(R.id.textViewTeamName);
+            textViewStadium = itemView.findViewById(R.id.textViewStadium);
+            imageBadge = itemView.findViewById(R.id.teamBadge);
+        }
     }
 }
